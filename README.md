@@ -13,6 +13,7 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot rerun` | Re-run the latest Actions workflow for the PR HEAD commit |
 | `@prbot rerun failed` | Re-run only failed jobs on that latest run |
 | `@prbot ready` | Mark a draft PR ready for review |
+| `@prbot status` | Table of merge state, checks, reviews, branch (with hints) |
 
 ## Create the GitHub App
 
@@ -24,6 +25,7 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
    - Contents: Read & write
    - Issues: Read & write
    - Actions: Read & write
+   - Checks: Read
 5. **Subscribe to events:** **Issue comments** only (for v0.1).
 6. Create and download a **private key**; note the **App ID**.
 

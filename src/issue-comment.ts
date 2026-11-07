@@ -4,6 +4,7 @@ import { createInstallationOctokit, replyOnIssue } from "./github.js";
 import { rebasePullRequest } from "./handlers/rebase.js";
 import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestReady } from "./handlers/ready.js";
+import { pullRequestStatus } from "./handlers/status.js";
 
 export interface IssueCommentPayload {
   action: string;
@@ -86,6 +87,9 @@ export async function handleIssueComment(
         repo,
         issueNumber,
       );
+      break;
+    case "status":
+      reply = await pullRequestStatus(octokit, owner, repo, issueNumber);
       break;
   }
 

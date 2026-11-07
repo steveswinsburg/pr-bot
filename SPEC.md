@@ -25,6 +25,7 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 | `rerun` | Re-run the most recent workflow run for the PR’s HEAD commit |
 | `rerun failed` | Re-run only failed jobs on that run (if the run failed) |
 | `ready` | Mark a draft PR ready for review |
+| `status` | Reply with a markdown table: merge state, draft, checks, reviews, branch (with suggested `@prbot` actions) |
 
 Triggers only when the comment **action** is `created` and the sender is not this app’s bot user.
 
@@ -40,6 +41,7 @@ Triggers only when the comment **action** is `created` and the sender is not thi
 - Contents: Read & write (required when the GitHub App must update the head branch)
 - Issues: Read & write (PR conversation comments)
 - Actions: Read & write (`rerun`)
+- Checks: Read (`status`)
 
 **Secrets (Wrangler)**
 
@@ -54,4 +56,5 @@ Optional: `GITHUB_APP_SLUG` — bot login to ignore self-comments (defaults to `
 1. Valid webhook signature required; invalid signature → `401`.
 2. `@prbot rebase` on an open PR starts a rebase and posts a short acknowledgment comment.
 3. `@prbot rerun` re-runs the latest Actions workflow for the PR HEAD SHA.
-4. Unknown commands get a helpful reply without throwing.
+4. `@prbot status` summarizes blockers in a table with next-step hints.
+5. Unknown commands get a helpful reply without throwing.
