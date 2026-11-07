@@ -31,6 +31,21 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 
 Install the app on the org/repos where you want `@prbot` to work.
 
+## CI/CD
+
+GitHub Actions run on every pull request and push to `master`:
+
+- **CI** — `npm ci`, typecheck, tests, `wrangler deploy --dry-run` (bundle check).
+
+After merge to `master`, **Deploy** runs the same checks and `wrangler deploy`. Add repository secrets:
+
+| Secret | Purpose |
+|--------|---------|
+| `CLOUDFLARE_API_TOKEN` | [API token](https://dash.cloudflare.com/profile/api-tokens) with **Workers Scripts: Edit** |
+| `CLOUDFLARE_ACCOUNT_ID` | Account ID from the Cloudflare dashboard |
+
+Worker runtime secrets (`GITHUB_APP_*`) are still set with `wrangler secret put`, not via Actions.
+
 ## Develop and deploy
 
 ```bash
