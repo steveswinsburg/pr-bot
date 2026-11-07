@@ -1,0 +1,11 @@
+{
+  "name": "pr-bot",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-07",
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  }
+}

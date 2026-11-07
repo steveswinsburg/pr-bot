@@ -1,0 +1,24 @@
+{
+  "name": "pr-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "@octokit/auth-app": "^8.1.2",
+    "@octokit/rest": "^22.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261104.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.46.0"
+  }
+}

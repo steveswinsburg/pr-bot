@@ -1,0 +1,7 @@
+GITHUB_APP_ID=123456
+GITHUB_WEBHOOK_SECRET=replace-me
+# Paste the full PEM; for local dev you can use a single line with \n or a multiline value in .dev.vars
+GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----"
+GITHUB_APP_SLUG=pr-bot
