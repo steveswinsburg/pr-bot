@@ -3,6 +3,7 @@ import { HELP_TEXT, parseCommand } from "./commands.js";
 import { createInstallationOctokit, replyOnIssue } from "./github.js";
 import { rebasePullRequest } from "./handlers/rebase.js";
 import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
+import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
 
@@ -82,6 +83,14 @@ export async function handleIssueComment(
     }
     case "ready":
       reply = await markPullRequestReady(
+        octokit,
+        owner,
+        repo,
+        issueNumber,
+      );
+      break;
+    case "draft":
+      reply = await markPullRequestDraft(
         octokit,
         owner,
         repo,

@@ -98,7 +98,7 @@ function draftCell(snapshot: StatusSnapshot): { state: string; action: string } 
   if (snapshot.draft) {
     return { state: "Yes", action: "`@prbot ready` when ready for review." };
   }
-  return { state: "No", action: "—" };
+  return { state: "No", action: "`@prbot draft` to mark as draft." };
 }
 
 export function formatStatusMessage(snapshot: StatusSnapshot): string {
