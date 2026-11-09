@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PR Bot — GitHub commands in PR comments</title>
+    <meta
+      name="description"
+      content="Mention @prbot on a pull request to rebase, rerun CI, check status, and more."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #30363d;
+        --text: #e6edf3;
+        --muted: #8b949e;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #ffffff;
+          --surface: #f6f8fa;
+          --border: #d0d7de;
+          --text: #1f2328;
+          --muted: #656d76;
+          --accent: #0969da;
+          --green: #1a7f37;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 42rem;
+        margin: 0 auto;
+        padding: 3rem 1.25rem 4rem;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      img.logo {
+        width: 120px;
+        height: auto;
+        margin-bottom: 1rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+        letter-spacing: -0.02em;
+      }
+      .lead {
+        color: var(--muted);
+        font-size: 1.0625rem;
+        margin: 0;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      h2 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        margin: 0 0 1rem;
+        font-weight: 600;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          monospace;
+        font-size: 0.875em;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        padding: 0.15em 0.4em;
+        border-radius: 6px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9375rem;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      tr:last-child th,
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th {
+        font-weight: 500;
+        width: 42%;
+      }
+      td {
+        color: var(--muted);
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+      a.btn {
+        display: inline-block;
+        text-decoration: none;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: var(--surface);
+      }
+      a.btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      @media (prefers-color-scheme: light) {
+        a.btn.primary {
+          color: #fff;
+        }
+      }
+      a.btn:hover {
+        opacity: 0.9;
+      }
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.8125rem;
+        margin-top: 2rem;
+      }
+      footer a {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <img class="logo" src="assets/bender.png" width="120" height="120" alt="" />
+        <h1>PR Bot</h1>
+        <p class="lead">
+          A GitHub App that runs from PR comments — type
+          <code>@prbot help</code> on any pull request.
+        </p>
+      </header>
+
+      <section class="card" aria-labelledby="commands-heading">
+        <h2 id="commands-heading">Commands</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th><code>@prbot rebase</code></th>
+              <td>Rebase onto the base branch</td>
+            </tr>
+            <tr>
+              <th><code>@prbot rerun</code></th>
+              <td>Re-run the latest workflow for this PR</td>
+            </tr>
+            <tr>
+              <th><code>@prbot rerun failed</code></th>
+              <td>Re-run only failed jobs</td>
+            </tr>
+            <tr>
+              <th><code>@prbot ready</code> / <code>draft</code></th>
+              <td>Mark ready for review or back to draft</td>
+            </tr>
+            <tr>
+              <th><code>@prbot status</code></th>
+              <td>Checks, reviews, and merge state</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" aria-labelledby="how-heading">
+        <h2 id="how-heading">How it works</h2>
+        <p style="margin: 0; color: var(--muted); font-size: 0.9375rem">
+          Install the GitHub App on your org or repos. PR Bot listens for issue
+          comments on pull requests via a Cloudflare Worker — no long-lived
+          servers, verified GitHub webhooks.
+        </p>
+      </section>
+
+      <nav class="links" aria-label="Project links">
+        <a
+          class="btn primary"
+          href="https://github.com/steveswinsburg/pr-bot"
+          rel="noopener"
+        >GitHub repo</a
+        >
+        <a
+          class="btn"
+          href="https://github.com/steveswinsburg/pr-bot/blob/master/README.md"
+          rel="noopener"
+        >Setup guide</a
+        >
+        <a
+          class="btn"
+          href="https://github.com/steveswinsburg/pr-bot/blob/master/SPEC.md"
+          rel="noopener"
+        >Spec</a
+        >
+      </nav>
+
+      <footer>
+        Self-host with Workers, or fork and deploy your own.
+      </footer>
+    </div>
+  </body>
+</html>

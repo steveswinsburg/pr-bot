@@ -8,6 +8,8 @@ GitHub App that listens for PR comments like `@prbot rebase` and `@prbot rerun`.
 
 See [SPEC.md](./SPEC.md) for behavior and permissions.
 
+**Landing page:** static site in [`docs/`](./docs/) — enable [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) with source **Deploy from branch**, branch `master`, folder `/docs`.
+
 ## Commands
 
 | Comment | Action |
