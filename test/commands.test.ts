@@ -37,4 +37,8 @@ describe("parseCommand", () => {
   it("parses status", () => {
     expect(parseCommand("@prbot status")).toEqual({ kind: "status" });
   });
+
+  it("parses draft", () => {
+    expect(parseCommand("@prbot draft")).toEqual({ kind: "draft" });
+  });
 });

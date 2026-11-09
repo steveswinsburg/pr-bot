@@ -25,6 +25,7 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 | `rerun` | Re-run the most recent workflow run for the PR’s HEAD commit |
 | `rerun failed` | Re-run only failed jobs on that run (if the run failed) |
 | `ready` | Mark a draft PR ready for review |
+| `draft` | Convert an open PR back to draft |
 | `status` | Reply with a markdown table: merge state, draft, checks, reviews, branch (with suggested `@prbot` actions) |
 
 Triggers only when the comment **action** is `created` and the sender is not this app’s bot user.
