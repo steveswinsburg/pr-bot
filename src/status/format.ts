@@ -30,7 +30,7 @@ function formatChecksLine(checks: StatusSnapshot["checks"]): string {
 
 function mergeAction(snapshot: StatusSnapshot): string {
   if (snapshot.mergeable === null) {
-    return "GitHub is still computing mergeability — try again in a minute.";
+    return "GitHub is still computing mergeability - try again in a minute.";
   }
   const state = snapshot.mergeState?.toLowerCase();
   if (snapshot.draft) return "Use `@prbot ready` when you want review.";
@@ -42,7 +42,7 @@ function mergeAction(snapshot: StatusSnapshot): string {
     return "Update the branch (e.g. `@prbot rebase`).";
   }
   if (state === "clean") return "Nothing blocking from merge state.";
-  return "—";
+  return "-";
 }
 
 function reviewsCell(snapshot: StatusSnapshot): { state: string; action: string } {
@@ -80,7 +80,7 @@ function branchCell(snapshot: StatusSnapshot): { state: string; action: string }
       action: "Use `@prbot rebase` if you want it updated.",
     };
   }
-  return { state: `Up to date with \`${snapshot.baseRef}\``, action: "—" };
+  return { state: `Up to date with \`${snapshot.baseRef}\``, action: "-" };
 }
 
 function checksAction(snapshot: StatusSnapshot): string {
@@ -91,7 +91,7 @@ function checksAction(snapshot: StatusSnapshot): string {
   }
   if (failed) return "`@prbot rerun` or `@prbot rerun failed` to retry CI.";
   if (pending) return "Wait for in-progress checks to finish.";
-  return "—";
+  return "-";
 }
 
 function draftCell(snapshot: StatusSnapshot): { state: string; action: string } {
@@ -112,7 +112,7 @@ export function formatStatusMessage(snapshot: StatusSnapshot): string {
   const draft = draftCell(snapshot);
 
   const lines = [
-    `### PR #${snapshot.pullNumber} — status`,
+    `### PR #${snapshot.pullNumber} - status`,
     "",
     "| Item | State | Action |",
     "| --- | --- | --- |",

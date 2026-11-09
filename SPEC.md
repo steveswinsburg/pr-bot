@@ -1,4 +1,4 @@
-# PR Bot — specification (v0.1)
+# PR Bot - specification (v0.1)
 
 ## Objective
 
@@ -50,7 +50,7 @@ Triggers only when the comment **action** is `created` and the sender is not thi
 - `GITHUB_APP_PRIVATE_KEY` (PEM)
 - `GITHUB_WEBHOOK_SECRET`
 
-Optional: `GITHUB_APP_SLUG` — bot login to ignore self-comments (defaults to `pr-bot`).
+Optional: `GITHUB_APP_SLUG` - bot login to ignore self-comments (defaults to `pr-bot`).
 
 ## Success criteria
 

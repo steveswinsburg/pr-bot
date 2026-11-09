@@ -67,7 +67,7 @@ export async function pullRequestStatus(
   });
 
   if (pull.state !== "open") {
-    return `PR #${pullNumber} is ${pull.state} — status is only reported for open pull requests.`;
+    return `PR #${pullNumber} is ${pull.state} - status is only reported for open pull requests.`;
   }
 
   const [{ data: checkData }, { data: reviews }] = await Promise.all([

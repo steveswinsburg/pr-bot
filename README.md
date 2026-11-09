@@ -75,8 +75,8 @@ Point the GitHub App webhook URL at your deployed worker and send a test deliver
 
 GitHub cannot reach `localhost`. Options:
 
-- [smee.io](https://smee.io/) — forward events to `http://127.0.0.1:8787/github/webhook`
-- `cloudflared tunnel` — temporary public URL to your `wrangler dev` port
+- [smee.io](https://smee.io/) - forward events to `http://127.0.0.1:8787/github/webhook`
+- `cloudflared tunnel` - temporary public URL to your `wrangler dev` port
 
 ## Adding commands
 
