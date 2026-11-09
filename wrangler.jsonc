@@ -7,5 +7,7 @@
     "traces": {
       "enabled": true
     }
-  }
+  },
+  // Required for Workers Previews / branch deploys. Add preview-only vars or bindings here when needed.
+  "previews": {}
 }

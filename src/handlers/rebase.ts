@@ -13,7 +13,7 @@ export async function rebasePullRequest(
   });
 
   if (pull.state !== "open") {
-    return "This pull request is not open — nothing to rebase.";
+    return "This pull request is not open - nothing to rebase.";
   }
 
   const pullRequestId = pull.node_id;
@@ -40,7 +40,7 @@ export async function rebasePullRequest(
       return "I don't have permission to update this branch. The app needs **Contents: Read & write** on this repo (and on the head repo for forks).";
     }
     if (message.includes("422") || message.toLowerCase().includes("conflict")) {
-      return "Could not rebase — the branch may be up to date, blocked by rules, or has conflicts. Resolve conflicts locally if needed.";
+      return "Could not rebase - the branch may be up to date, blocked by rules, or has conflicts. Resolve conflicts locally if needed.";
     }
     return `Rebase failed: ${message}`;
   }

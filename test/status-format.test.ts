@@ -21,7 +21,7 @@ const base: StatusSnapshot = {
 describe("formatStatusMessage", () => {
   it("renders a status table with actionable hints", () => {
     const md = formatStatusMessage(base);
-    expect(md).toContain("### PR #42 — status");
+    expect(md).toContain("### PR #42 - status");
     expect(md).toContain("| Merge | **BLOCKED** |");
     expect(md).toContain("ci/lint");
     expect(md).toContain("Review required");

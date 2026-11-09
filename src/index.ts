@@ -7,7 +7,7 @@ export default {
     const url = new URL(request.url);
 
     if (request.method === "GET" && url.pathname === "/") {
-      return new Response("PR Bot — POST GitHub webhooks to /github/webhook", {
+      return new Response("PR Bot - POST GitHub webhooks to /github/webhook", {
         status: 200,
       });
     }
