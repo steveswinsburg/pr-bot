@@ -154,6 +154,20 @@
       footer a {
         color: var(--accent);
       }
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        justify-content: center;
+        margin: 1rem 0 0;
+      }
+      .badges a {
+        line-height: 0;
+      }
+      .badges img {
+        height: 20px;
+        vertical-align: middle;
+      }
       .github-btn {
         display: inline-flex;
         align-items: center;
@@ -181,6 +195,23 @@
         <p class="lead">
           A GitHub App that runs from PR comments - type
           <code>@prbot help</code> on any pull request.
+        </p>
+        <p class="badges">
+          <a href="https://github.com/steveswinsburg/pr-bot/actions/workflows/ci.yml" rel="noopener"
+            ><img
+              src="https://github.com/steveswinsburg/pr-bot/actions/workflows/ci.yml/badge.svg"
+              alt="CI"
+          /></a>
+          <a href="https://github.com/steveswinsburg/pr-bot/actions" rel="noopener"
+            ><img
+              src="https://img.shields.io/github/check-runs/steveswinsburg/pr-bot/master?label=Workers%20Builds&amp;logo=cloudflare&amp;color=F38020"
+              alt="Cloudflare Workers Builds"
+          /></a>
+          <a href="https://github.com/steveswinsburg/pr-bot/actions/workflows/pages/pages-build-deployment" rel="noopener"
+            ><img
+              src="https://github.com/steveswinsburg/pr-bot/actions/workflows/pages/pages-build-deployment/badge.svg"
+              alt="GitHub Pages"
+          /></a>
         </p>
       </header>
 

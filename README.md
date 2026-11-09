@@ -4,11 +4,16 @@
 
 # PR Bot
 
+[![CI](https://github.com/steveswinsburg/pr-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/steveswinsburg/pr-bot/actions/workflows/ci.yml)
+[![Workers Builds](https://img.shields.io/github/check-runs/steveswinsburg/pr-bot/master?label=Workers%20Builds&logo=cloudflare&color=F38020)](https://github.com/steveswinsburg/pr-bot/actions)
+[![Pages](https://github.com/steveswinsburg/pr-bot/actions/workflows/pages/pages-build-deployment/badge.svg)](https://steveswinsburg.github.io/pr-bot/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://github.com/steveswinsburg/pr-bot/blob/master/tsconfig.json)
+
 GitHub App that listens for PR comments like `@prbot rebase` and `@prbot rerun`. It runs on a [Cloudflare Worker](https://developers.cloudflare.com/workers/) and verifies GitHub webhooks with HMAC.
 
 See [SPEC.md](./SPEC.md) for behavior and permissions.
 
-**Landing page:** static site in [`docs/`](./docs/) — enable [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) with source **Deploy from branch**, branch `master`, folder `/docs`.
+**Landing page:** [steveswinsburg.github.io/pr-bot/](https://steveswinsburg.github.io/pr-bot/) (source in [`docs/`](./docs/)).
 
 ## Commands
 
