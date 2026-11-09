@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/bender.png" alt="PR Bot" width="160" />
+</p>
+
 # PR Bot
 
 GitHub App that listens for PR comments like `@prbot rebase` and `@prbot rerun`. It runs on a [Cloudflare Worker](https://developers.cloudflare.com/workers/) and verifies GitHub webhooks with HMAC.
