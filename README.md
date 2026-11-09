@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/bender.png" alt="PR Bot" width="160" />
+</p>
+
 # PR Bot
 
 GitHub App that listens for PR comments like `@prbot rebase` and `@prbot rerun`. It runs on a [Cloudflare Worker](https://developers.cloudflare.com/workers/) and verifies GitHub webhooks with HMAC.
@@ -13,6 +17,7 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot rerun` | Re-run the latest Actions workflow for the PR HEAD commit |
 | `@prbot rerun failed` | Re-run only failed jobs on that latest run |
 | `@prbot ready` | Mark a draft PR ready for review |
+| `@prbot draft` | Convert an open PR back to draft |
 | `@prbot status` | Table of merge state, checks, reviews, branch (with hints) |
 
 ## Create the GitHub App
