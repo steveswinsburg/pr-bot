@@ -49,6 +49,26 @@ GitHub Actions run on every pull request and push to `master`: `npm ci`, typeche
 
 Production deploys are handled in **Cloudflare** (Workers Builds / your Cloudflare pipeline), not GitHub Actions.
 
+## Deploy on Cloudflare
+
+Use **Workers Builds** to deploy this repo on push to your default branch:
+
+1. In the [Cloudflare dashboard](https://dash.cloudflare.com/) go to **Workers & Pages** → **Create** → **Create Worker** (or use an existing Worker).
+2. Open the Worker → **Settings** → **Builds** → **Connect** your GitHub account and select **this repository**.
+3. Set **Production branch** to `master` (or your default). **Root directory** `/`. **Build command:**
+
+   ```bash
+   npm ci && npx wrangler deploy
+   ```
+
+4. Under **Settings → Variables and secrets**, add the [production secrets](#develop-and-deploy) (`GITHUB_APP_ID`, `GITHUB_WEBHOOK_SECRET`, `GITHUB_APP_PRIVATE_KEY` as **PKCS#8** PEM, optional `GITHUB_APP_SLUG`). Secrets are not in git; set them in the dashboard or with `npx wrangler secret put`.
+5. Run a build (push to the production branch or **Retry deployment**). Your URL is on the Worker overview, e.g. `https://pr-bot.<your-subdomain>.workers.dev`.
+6. In the [GitHub App](https://github.com/settings/apps), set **Webhook URL** to `https://<that-host>/github/webhook`.
+
+`wrangler.jsonc` names the Worker (`pr-bot` by default) and includes a `previews` block for branch preview deploys on pull requests. For preview secrets, use **Previews Base** in the Worker settings or `wrangler preview base-config secret put`.
+
+**CLI only:** `npm install`, configure `.dev.vars`, then `npm run deploy` after `npx wrangler login`.
+
 ## Develop and deploy
 
 ```bash
