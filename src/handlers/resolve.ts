@@ -288,7 +288,18 @@ async function resolveWithStrategy(
 
     const path = file.path;
     if (inConflict || !headTouched.has(path)) {
-      const blob = await blobShaAtRef(octokit, pickRef, path, pickRef.sha);
+      const baseRef: RepoRef & { sha: string } = {
+        owner: pull.base.repo.owner.login,
+        repo: pull.base.repo.name,
+        sha: baseSha,
+      };
+      const contentRef = inConflict ? pickRef : baseRef;
+      const blob = await blobShaAtRef(
+        octokit,
+        contentRef,
+        path,
+        contentRef.sha,
+      );
       if (!blob) {
         return `Could not read \`${path}\` while merging - resolve conflicts manually.`;
       }
