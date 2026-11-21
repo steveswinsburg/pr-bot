@@ -21,12 +21,20 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 |---------|--------|
 | `@prbot help` | List commands |
 | `@prbot rebase` | Rebase the PR branch onto its base |
+| `@prbot resolve` | Merge the latest base into this branch (Update branch); auto-resolve conflicts favoring the PR branch when possible |
+| `@prbot resolve ours` | Merge base into head; on conflicts, keep the PR branch file |
+| `@prbot resolve theirs` | Merge base into head; on conflicts, keep the base file |
 | `@prbot rerun` | Re-run the latest Actions workflow for the PR HEAD commit |
 | `@prbot rerun failed` | Re-run only failed jobs on that latest run |
 | `@prbot ready` | Mark a draft PR ready for review |
 | `@prbot draft` | Convert an open PR back to draft |
 | `@prbot status` | Table of merge state, checks, reviews, branch (with hints) |
 | `@prbot commits` | Short sha + subject per commit (max 20) |
+| `@prbot changelog` | Bullet list of commit messages vs base |
+| `@prbot diff` | File/line summary vs base (top 10 paths) |
+| `@prbot lock` | Lock the PR conversation |
+| `@prbot unlock` | Unlock the PR conversation |
+| `@prbot update` | Merge latest base into the PR branch when behind |
 
 ## Create the GitHub App
 
@@ -92,7 +100,7 @@ Repeat the [Deploy on Cloudflare](#deploy-on-cloudflare) steps for each instance
 
 The `name` in `wrangler.jsonc` is the Worker’s identity in Cloudflare (`pr-bot` by default). For Workers Builds, the Worker you create in the dashboard should use the **same name** (Builds can override via CI when connected).
 
-**Separate Workers from one repo** — use [Wrangler environments](https://developers.cloudflare.com/workers/wrangler/environments/) and point each Cloudflare “connect repo” project at the right deploy command:
+**Separate Workers from one repo** - use [Wrangler environments](https://developers.cloudflare.com/workers/wrangler/environments/) and point each Cloudflare “connect repo” project at the right deploy command:
 
 ```jsonc
 {
