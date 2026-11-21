@@ -27,6 +27,7 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 | `ready` | Mark a draft PR ready for review |
 | `draft` | Convert an open PR back to draft |
 | `status` | Reply with a markdown table: merge state, draft, checks, reviews, branch (with suggested `@prbot` actions) |
+| `changelog` | Markdown bullet list of first-line commit messages on the PR branch since the merge base (compare API) |
 
 Triggers only when the comment **action** is `created` and the sender is not this app’s bot user.
 
