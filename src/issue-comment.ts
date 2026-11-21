@@ -10,6 +10,7 @@ import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
+import { updatePullRequest } from "./handlers/update.js";
 
 export interface IssueCommentPayload {
   action: string;
@@ -113,6 +114,9 @@ export async function handleIssueComment(
       break;
     case "status":
       reply = await pullRequestStatus(octokit, owner, repo, issueNumber);
+      break;
+    case "update":
+      reply = await updatePullRequest(octokit, owner, repo, issueNumber);
       break;
   }
 
