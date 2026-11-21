@@ -6,15 +6,34 @@ export type BotCommand =
   | { kind: "draft" }
   | { kind: "status" };
 
-const MENTION = /@prbot\b/i;
+function escapeRegexLiteral(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-export function parseCommand(body: string): BotCommand | null {
+/** Leading @prbot (and optional app slug) only — avoids parsing our help replies. */
+export function commandMentionPattern(appSlug?: string): RegExp {
+  const names = ["prbot"];
+  if (appSlug) {
+    const slug = appSlug.toLowerCase();
+    if (!names.includes(slug)) names.push(slug);
+  }
+  const alternation = names.map(escapeRegexLiteral).join("|");
+  return new RegExp(`^@(?:${alternation})(?:\\[bot\\])?(?=\\s|$)`, "i");
+}
+
+export function parseCommand(
+  body: string,
+  options?: { appSlug?: string },
+): BotCommand | null {
   const trimmed = body.trim();
-  if (!MENTION.test(trimmed)) return null;
+  const mention = commandMentionPattern(options?.appSlug);
+  const match = mention.exec(trimmed);
+  if (!match) return null;
 
-  const afterMention = trimmed.replace(MENTION, "").trim();
+  const afterMention = trimmed.slice(match[0].length).trim();
   const tokens = afterMention.split(/\s+/).filter(Boolean);
-  const verb = tokens[0]?.toLowerCase();
+  let verb = tokens[0]?.toLowerCase();
+  if (verb?.startsWith("/")) verb = verb.slice(1);
   if (!verb) return { kind: "help" };
 
   switch (verb) {

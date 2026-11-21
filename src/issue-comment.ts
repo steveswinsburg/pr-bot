@@ -1,5 +1,9 @@
 import type { Env } from "./env.js";
-import { HELP_TEXT, parseCommand } from "./commands.js";
+import {
+  commandMentionPattern,
+  HELP_TEXT,
+  parseCommand,
+} from "./commands.js";
 import { createInstallationOctokit, replyOnIssue } from "./github.js";
 import { rebasePullRequest } from "./handlers/rebase.js";
 import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
@@ -21,7 +25,8 @@ export interface IssueCommentPayload {
   };
 }
 
-function isOwnBotComment(env: Env, login: string | undefined): boolean {
+function isOwnBotComment(env: Env, login: string | undefined, userType?: string): boolean {
+  if (userType === "Bot") return true;
   if (!login) return false;
   const slug = (env.GITHUB_APP_SLUG ?? "pr-bot").toLowerCase();
   const lower = login.toLowerCase();
@@ -35,11 +40,20 @@ export async function handleIssueComment(
   if (payload.action !== "created") return;
   if (!payload.issue.pull_request) return;
   if (!payload.installation?.id) return;
-  if (isOwnBotComment(env, payload.comment.user?.login)) return;
+  if (
+    isOwnBotComment(
+      env,
+      payload.comment.user?.login,
+      payload.comment.user?.type,
+    )
+  ) {
+    return;
+  }
 
-  const command = parseCommand(payload.comment.body);
+  const slug = env.GITHUB_APP_SLUG;
+  const command = parseCommand(payload.comment.body, { appSlug: slug });
   if (!command) {
-    if (/@prbot\b/i.test(payload.comment.body)) {
+    if (commandMentionPattern(slug).test(payload.comment.body.trim())) {
       const octokit = createInstallationOctokit(env, payload.installation.id);
       const { owner, name: repo } = payload.repository;
       await replyOnIssue(
