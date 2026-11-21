@@ -69,6 +69,64 @@ Use **Workers Builds** to deploy this repo on push to your default branch:
 
 **CLI only:** `npm install`, configure `.dev.vars`, then `npm run deploy` after `npx wrangler login`.
 
+### Private repositories
+
+You can connect a **private** fork or copy of this repo to Workers Builds. When installing the [Cloudflare Workers & Pages](https://github.com/apps/cloudflare-workers-and-pages) GitHub App, choose **Only select repositories** and grant access only to repos that should deploy. Your source stays private; Cloudflare clones it to build. The Worker itself is still served on a public `https://<name>.<subdomain>.workers.dev` URL so GitHub can deliver webhooks (unless you add separate access controls in front of the Worker).
+
+### Multiple deployments
+
+Each live bot is **one Cloudflare Worker + one GitHub App**:
+
+| Piece | Per deployment |
+|--------|----------------|
+| Worker | Separate project in Cloudflare (its own hostname) |
+| `wrangler.jsonc` `name` | Matches that Worker’s name in the dashboard |
+| Secrets | `GITHUB_*` for **that** app, on **that** Worker |
+| GitHub App | Own App ID, webhook URL → `https://<that-host>/github/webhook` |
+| Repos to `@prbot` | Install **that** app only on orgs/repos you intend |
+
+Repeat the [Deploy on Cloudflare](#deploy-on-cloudflare) steps for each instance (e.g. your team’s Worker and a customer’s). You can use this public repo as upstream and maintain a private repo per customer connected to its own Worker.
+
+### Worker name per deployment
+
+The `name` in `wrangler.jsonc` is the Worker’s identity in Cloudflare (`pr-bot` by default). For Workers Builds, the Worker you create in the dashboard should use the **same name** (Builds can override via CI when connected).
+
+**Separate Workers from one repo** — use [Wrangler environments](https://developers.cloudflare.com/workers/wrangler/environments/) and point each Cloudflare “connect repo” project at the right deploy command:
+
+```jsonc
+{
+  "name": "pr-bot",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-07",
+  "previews": {},
+  "env": {
+    "acme": {
+      "name": "pr-bot-acme"
+    }
+  }
+}
+```
+
+- Default production: `npm ci && npx wrangler deploy` → Worker **`pr-bot`**
+- Acme instance: create Worker **`pr-bot-acme`**, set deploy command to `npm ci && npx wrangler deploy --env acme` → Worker **`pr-bot-acme`** (`https://pr-bot-acme.<subdomain>.workers.dev`)
+
+CLI: `npx wrangler deploy --name pr-bot-acme` overrides the config name for one-off deploys.
+
+Branch **previews** (`npx wrangler preview`, `previews` in config) reuse the **same** Worker project with per-branch URLs; they do not create a new top-level Worker name.
+
+### Cloudflare comments on pull requests
+
+Two different comment sources:
+
+| Bot | When |
+|-----|------|
+| **cloudflare-workers-and-pages** | Workers Builds runs (especially **preview builds** on PRs): posts deploy status and preview URLs on the PR |
+| **Your GitHub App** | Someone comments `@prbot …` on a PR where the app is installed and the webhook hits your Worker |
+
+On a **private** repo, Cloudflare’s build comments are visible only to people who can access that repo; they do not publish your code. There is currently **no** dashboard option to keep preview deploys but disable only those Cloudflare PR comments ([tracked request](https://github.com/cloudflare/developer-platform/issues/126)). To avoid them, turn off **Preview builds** under Worker **Settings → Build → Branch control** (preview URLs stop too). Production builds on your default branch are unaffected.
+
+Set optional secret **`GITHUB_APP_SLUG`** to your app’s slug so the bot recognizes `@<slug>[bot]` mentions and ignores its own comments correctly.
+
 ## Develop and deploy
 
 ```bash
