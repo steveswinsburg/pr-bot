@@ -6,7 +6,7 @@ export type BotCommand =
   | { kind: "ready" }
   | { kind: "draft" }
   | { kind: "status" }
-  | { kind: "lock"; locked: boolean };
+  | { kind: "lock"; locked: boolean }
   | { kind: "update" };
 
 function escapeRegexLiteral(value: string): string {

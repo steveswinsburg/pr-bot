@@ -60,6 +60,8 @@ describe("parseCommand", () => {
   it("parses lock and unlock", () => {
     expect(parseCommand("@prbot lock")).toEqual({ kind: "lock", locked: true });
     expect(parseCommand("@prbot unlock")).toEqual({ kind: "lock", locked: false });
+  });
+
   it("parses update", () => {
     expect(parseCommand("@prbot update")).toEqual({ kind: "update" });
   });

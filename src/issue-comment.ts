@@ -134,6 +134,7 @@ export async function handleIssueComment(
         issueNumber,
         command.locked,
       );
+      break;
     case "update":
       reply = await updatePullRequest(octokit, owner, repo, issueNumber);
       break;
