@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseCommand } from "../src/commands.js";
+import { HELP_TEXT, parseCommand } from "../src/commands.js";
 
 describe("parseCommand", () => {
   it("ignores comments without mention", () => {
@@ -40,5 +40,24 @@ describe("parseCommand", () => {
 
   it("parses draft", () => {
     expect(parseCommand("@prbot draft")).toEqual({ kind: "draft" });
+  });
+
+  it("parses help", () => {
+    expect(parseCommand("@prbot help")).toEqual({ kind: "help" });
+    expect(parseCommand("@prbot /help")).toEqual({ kind: "help" });
+  });
+
+  it("only parses when the mention leads the comment", () => {
+    expect(parseCommand("Unknown command. @prbot help")).toBeNull();
+    expect(parseCommand(`Unknown command. ${HELP_TEXT}`)).toBeNull();
+  });
+
+  it("parses app slug mention at start", () => {
+    expect(parseCommand("@steve-pr-bot help", { appSlug: "steve-pr-bot" })).toEqual({
+      kind: "help",
+    });
+    expect(parseCommand("@steve-pr-bot[bot] status", { appSlug: "steve-pr-bot" })).toEqual({
+      kind: "status",
+    });
   });
 });
