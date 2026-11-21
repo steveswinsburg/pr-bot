@@ -25,6 +25,33 @@ function headCompareRef(pull: { head: { repo: { full_name?: string; owner: { log
   return pull.head.sha;
 }
 
+/** Decide whether automatic resolve has nothing to merge. */
+export function shouldSkipResolve(
+  behindBy: number,
+  baseChangeCount: number,
+  conflictPathCount: number,
+): boolean {
+  return behindBy === 0 && baseChangeCount === 0 && conflictPathCount === 0;
+}
+
+/** Tip of the base branch (live), not pull.base.sha from pulls.get (can be stale). */
+async function getLiveBaseSha(
+  octokit: Octokit,
+  pull: {
+    base: {
+      ref: string;
+      repo: { owner: { login: string }; name: string };
+    };
+  },
+): Promise<string> {
+  const { data } = await octokit.repos.getBranch({
+    owner: pull.base.repo.owner.login,
+    repo: pull.base.repo.name,
+    branch: pull.base.ref,
+  });
+  return data.commit.sha;
+}
+
 async function getOpenPull(
   octokit: Octokit,
   owner: string,
@@ -158,15 +185,17 @@ async function resolveWithStrategy(
     ref: pull.head.ref,
     sha: pull.head.sha,
   };
-  const baseSha = pull.base.sha;
+  const baseSha = await getLiveBaseSha(octokit, pull);
+  const headRef = headCompareRef(pull);
 
   const { data: compareRange } = await octokit.repos.compareCommits({
     owner: pullRepo.owner,
     repo: pullRepo.repo,
     base: baseSha,
-    head: headCompareRef(pull),
+    head: headRef,
   });
   const mergeBaseSha = compareRange.merge_base_commit.sha;
+  const behindBy = compareRange.behind_by ?? 0;
 
   const baseChanges = await listCompareFiles(
     octokit,
@@ -180,7 +209,7 @@ async function resolveWithStrategy(
     pullRepo.owner,
     pullRepo.repo,
     mergeBaseSha,
-    headCompareRef(pull),
+    headRef,
   );
 
   const headTouched = new Set(headChanges.map((f) => f.path));
@@ -189,7 +218,7 @@ async function resolveWithStrategy(
     [...headTouched].filter((path) => baseTouched.has(path)),
   );
 
-  if (baseChanges.length === 0 && conflictPaths.size === 0) {
+  if (shouldSkipResolve(behindBy, baseChanges.length, conflictPaths.size)) {
     return "The base branch has no new changes to merge in - nothing to resolve.";
   }
 
@@ -335,6 +364,7 @@ export async function resolvePullRequest(
     }
   }
 
+  // GraphQL updatePullRequestBranch expects the current head OID only (not pull.base.sha).
   const merge = await mergeUpdateBranch(
     octokit,
     pull.node_id,
