@@ -30,6 +30,8 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 | `ready` | Mark a draft PR ready for review |
 | `draft` | Convert an open PR back to draft |
 | `status` | Reply with a markdown table: merge state, draft, checks, reviews, branch (with suggested `@prbot` actions) |
+| `changelog` | Markdown bullet list of first-line commit messages on the PR branch since the merge base (compare API) |
+| `diff` | Short compare summary vs base: file count, total +/- lines, top 10 changed paths |
 | `lock` | Lock the pull request conversation (`issues.lock`) |
 | `unlock` | Unlock the pull request conversation (`issues.unlock`) |
 | `update` | If the PR branch is behind its base, merge the base into the head via GraphQL `updatePullRequestBranch` (`updateMethod: MERGE`); if clean/up-to-date, say so; if dirty/conflicted, suggest resolving locally |
