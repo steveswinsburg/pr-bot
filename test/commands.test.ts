@@ -57,8 +57,14 @@ describe("parseCommand", () => {
     expect(parseCommand("@prbot draft")).toEqual({ kind: "draft" });
   });
 
+  it("parses changelog", () => {
+    expect(parseCommand("@prbot changelog")).toEqual({ kind: "changelog" });
+  });
+
   it("parses diff", () => {
     expect(parseCommand("@prbot diff")).toEqual({ kind: "diff" });
+  });
+
   it("parses lock and unlock", () => {
     expect(parseCommand("@prbot lock")).toEqual({ kind: "lock", locked: true });
     expect(parseCommand("@prbot unlock")).toEqual({ kind: "lock", locked: false });
