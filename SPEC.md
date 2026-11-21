@@ -22,6 +22,9 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 |---|---|
 | `help` | Reply with available commands |
 | `rebase` | Rebase the PR branch onto its base via GraphQL `updatePullRequestBranch` (`updateMethod: REBASE`) |
+| `resolve` | Merge the latest base into the PR branch via GraphQL `updatePullRequestBranch` (`updateMethod: MERGE`, same as GitHub “Update branch”); on merge conflict, attempt automatic resolution keeping the PR branch on overlapping files. Otherwise suggests `resolve ours` / `resolve theirs`. |
+| `resolve ours` | Merge base into head via Git Data API; on files changed on both sides since the merge-base, keep the head (PR branch) version. |
+| `resolve theirs` | Same as `resolve ours`, but keep the base version on overlapping files. |
 | `rerun` | Re-run the most recent workflow run for the PR’s HEAD commit |
 | `rerun failed` | Re-run only failed jobs on that run (if the run failed) |
 | `ready` | Mark a draft PR ready for review |

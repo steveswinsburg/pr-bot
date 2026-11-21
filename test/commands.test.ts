@@ -11,6 +11,21 @@ describe("parseCommand", () => {
     expect(parseCommand("@PRBot  rebase please")).toEqual({ kind: "rebase" });
   });
 
+  it("parses resolve variants", () => {
+    expect(parseCommand("@prbot resolve")).toEqual({
+      kind: "resolve",
+      strategy: "merge",
+    });
+    expect(parseCommand("@prbot resolve ours")).toEqual({
+      kind: "resolve",
+      strategy: "ours",
+    });
+    expect(parseCommand("@prbot resolve theirs please")).toEqual({
+      kind: "resolve",
+      strategy: "theirs",
+    });
+  });
+
   it("parses rerun variants", () => {
     expect(parseCommand("@prbot rerun")).toEqual({
       kind: "rerun",

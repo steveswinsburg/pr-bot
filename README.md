@@ -21,6 +21,9 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 |---------|--------|
 | `@prbot help` | List commands |
 | `@prbot rebase` | Rebase the PR branch onto its base |
+| `@prbot resolve` | Merge the latest base into this branch (Update branch); auto-resolve conflicts favoring the PR branch when possible |
+| `@prbot resolve ours` | Merge base into head; on conflicts, keep the PR branch file |
+| `@prbot resolve theirs` | Merge base into head; on conflicts, keep the base file |
 | `@prbot rerun` | Re-run the latest Actions workflow for the PR HEAD commit |
 | `@prbot rerun failed` | Re-run only failed jobs on that latest run |
 | `@prbot ready` | Mark a draft PR ready for review |
