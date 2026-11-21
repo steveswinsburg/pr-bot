@@ -6,6 +6,7 @@ import {
 } from "./commands.js";
 import { createInstallationOctokit, replyOnIssue } from "./github.js";
 import { rebasePullRequest } from "./handlers/rebase.js";
+import { resolvePullRequest } from "./handlers/resolve.js";
 import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
@@ -80,6 +81,15 @@ export async function handleIssueComment(
       break;
     case "rebase":
       reply = await rebasePullRequest(octokit, owner, repo, issueNumber);
+      break;
+    case "resolve":
+      reply = await resolvePullRequest(
+        octokit,
+        owner,
+        repo,
+        issueNumber,
+        command.strategy,
+      );
       break;
     case "rerun": {
       const { data: pull } = await octokit.pulls.get({
