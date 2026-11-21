@@ -6,11 +6,13 @@ import {
 } from "./commands.js";
 import { createInstallationOctokit, replyOnIssue } from "./github.js";
 import { rebasePullRequest } from "./handlers/rebase.js";
+import { resolvePullRequest } from "./handlers/resolve.js";
 import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
 import { setPullRequestLocked } from "./handlers/lock.js";
+import { updatePullRequest } from "./handlers/update.js";
 
 export interface IssueCommentPayload {
   action: string;
@@ -81,6 +83,15 @@ export async function handleIssueComment(
     case "rebase":
       reply = await rebasePullRequest(octokit, owner, repo, issueNumber);
       break;
+    case "resolve":
+      reply = await resolvePullRequest(
+        octokit,
+        owner,
+        repo,
+        issueNumber,
+        command.strategy,
+      );
+      break;
     case "rerun": {
       const { data: pull } = await octokit.pulls.get({
         owner,
@@ -123,6 +134,8 @@ export async function handleIssueComment(
         issueNumber,
         command.locked,
       );
+    case "update":
+      reply = await updatePullRequest(octokit, owner, repo, issueNumber);
       break;
   }
 
