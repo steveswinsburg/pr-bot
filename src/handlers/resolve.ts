@@ -149,7 +149,7 @@ async function resolveWithStrategy(
   strategy: "ours" | "theirs",
 ): Promise<string> {
   if (!pull.head.repo) {
-    return "The head repository is unavailable (fork deleted?) — cannot update the branch.";
+    return "The head repository is unavailable (fork deleted?) - cannot update the branch.";
   }
 
   const head: RepoRef & { ref: string; sha: string } = {
@@ -190,7 +190,7 @@ async function resolveWithStrategy(
   );
 
   if (baseChanges.length === 0 && conflictPaths.size === 0) {
-    return "The base branch has no new changes to merge in — nothing to resolve.";
+    return "The base branch has no new changes to merge in - nothing to resolve.";
   }
 
   const { data: headCommit } = await octokit.git.getCommit({
@@ -261,7 +261,7 @@ async function resolveWithStrategy(
     if (inConflict || !headTouched.has(path)) {
       const blob = await blobShaAtRef(octokit, pickRef, path, pickRef.sha);
       if (!blob) {
-        return `Could not read \`${path}\` while merging — resolve conflicts manually.`;
+        return `Could not read \`${path}\` while merging - resolve conflicts manually.`;
       }
       treeUpdates.push({ path, mode: "100644", type: "blob", sha: blob });
     }

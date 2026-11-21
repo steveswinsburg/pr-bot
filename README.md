@@ -94,7 +94,7 @@ Repeat the [Deploy on Cloudflare](#deploy-on-cloudflare) steps for each instance
 
 The `name` in `wrangler.jsonc` is the Worker’s identity in Cloudflare (`pr-bot` by default). For Workers Builds, the Worker you create in the dashboard should use the **same name** (Builds can override via CI when connected).
 
-**Separate Workers from one repo** — use [Wrangler environments](https://developers.cloudflare.com/workers/wrangler/environments/) and point each Cloudflare “connect repo” project at the right deploy command:
+**Separate Workers from one repo** - use [Wrangler environments](https://developers.cloudflare.com/workers/wrangler/environments/) and point each Cloudflare “connect repo” project at the right deploy command:
 
 ```jsonc
 {
