@@ -10,7 +10,7 @@ function escapeRegexLiteral(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Leading @prbot (and optional app slug) only — avoids parsing our help replies. */
+/** Leading @prbot (and optional app slug) only - avoids parsing our help replies. */
 export function commandMentionPattern(appSlug?: string): RegExp {
   const names = ["prbot"];
   if (appSlug) {
