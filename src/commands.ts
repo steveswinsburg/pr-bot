@@ -6,6 +6,7 @@ export type BotCommand =
   | { kind: "ready" }
   | { kind: "draft" }
   | { kind: "status" }
+  | { kind: "commits" }
   | { kind: "changelog" }
   | { kind: "diff" }
   | { kind: "lock"; locked: boolean }
@@ -62,6 +63,8 @@ export function parseCommand(
       return { kind: "draft" };
     case "status":
       return { kind: "status" };
+    case "commits":
+      return { kind: "commits" };
     case "changelog":
       return { kind: "changelog" };
     case "diff":
@@ -88,6 +91,7 @@ export const HELP_TEXT = `**PR Bot** commands (use \`@prbot <command>\` on this 
 - \`@prbot ready\` - mark a draft PR ready for review
 - \`@prbot draft\` - convert an open PR back to draft
 - \`@prbot status\` - table of merge state, checks, reviews, and branch
+- \`@prbot commits\` - short sha and subject for PR commits (up to 20)
 - \`@prbot changelog\` - bullet list of commit messages on this branch vs base
 - \`@prbot diff\` - short summary vs base: files, line counts, top paths
 - \`@prbot lock\` - lock the PR conversation

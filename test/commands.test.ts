@@ -57,6 +57,10 @@ describe("parseCommand", () => {
     expect(parseCommand("@prbot draft")).toEqual({ kind: "draft" });
   });
 
+  it("parses commits", () => {
+    expect(parseCommand("@prbot commits")).toEqual({ kind: "commits" });
+  });
+
   it("parses changelog", () => {
     expect(parseCommand("@prbot changelog")).toEqual({ kind: "changelog" });
   });

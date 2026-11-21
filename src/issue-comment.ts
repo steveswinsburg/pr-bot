@@ -11,6 +11,7 @@ import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
+import { pullRequestCommits } from "./handlers/commits.js";
 import { pullRequestChangelog } from "./handlers/changelog.js";
 import { pullRequestDiff } from "./handlers/diff.js";
 import { setPullRequestLocked } from "./handlers/lock.js";
@@ -127,6 +128,9 @@ export async function handleIssueComment(
       break;
     case "status":
       reply = await pullRequestStatus(octokit, owner, repo, issueNumber);
+      break;
+    case "commits":
+      reply = await pullRequestCommits(octokit, owner, repo, issueNumber);
       break;
     case "changelog":
       reply = await pullRequestChangelog(octokit, owner, repo, issueNumber);
