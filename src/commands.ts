@@ -4,7 +4,8 @@ export type BotCommand =
   | { kind: "rerun"; failedOnly: boolean }
   | { kind: "ready" }
   | { kind: "draft" }
-  | { kind: "status" };
+  | { kind: "status" }
+  | { kind: "lock"; locked: boolean };
 
 function escapeRegexLiteral(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -51,6 +52,10 @@ export function parseCommand(
       return { kind: "draft" };
     case "status":
       return { kind: "status" };
+    case "lock":
+      return { kind: "lock", locked: true };
+    case "unlock":
+      return { kind: "lock", locked: false };
     default:
       return null;
   }
@@ -64,4 +69,6 @@ export const HELP_TEXT = `**PR Bot** commands (use \`@prbot <command>\` on this 
 - \`@prbot ready\` - mark a draft PR ready for review
 - \`@prbot draft\` - convert an open PR back to draft
 - \`@prbot status\` - table of merge state, checks, reviews, and branch
+- \`@prbot lock\` - lock the PR conversation
+- \`@prbot unlock\` - unlock the PR conversation
 - \`@prbot help\` - show this message`;

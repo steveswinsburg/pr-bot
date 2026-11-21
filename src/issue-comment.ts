@@ -10,6 +10,7 @@ import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
+import { setPullRequestLocked } from "./handlers/lock.js";
 
 export interface IssueCommentPayload {
   action: string;
@@ -113,6 +114,15 @@ export async function handleIssueComment(
       break;
     case "status":
       reply = await pullRequestStatus(octokit, owner, repo, issueNumber);
+      break;
+    case "lock":
+      reply = await setPullRequestLocked(
+        octokit,
+        owner,
+        repo,
+        issueNumber,
+        command.locked,
+      );
       break;
   }
 

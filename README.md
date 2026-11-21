@@ -26,6 +26,8 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot ready` | Mark a draft PR ready for review |
 | `@prbot draft` | Convert an open PR back to draft |
 | `@prbot status` | Table of merge state, checks, reviews, branch (with hints) |
+| `@prbot lock` | Lock the PR conversation |
+| `@prbot unlock` | Unlock the PR conversation |
 
 ## Create the GitHub App
 
