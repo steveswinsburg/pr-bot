@@ -20,12 +20,27 @@ export async function markPullRequestDraft(
     return `PR #${pullNumber} is already a **draft**.`;
   }
 
-  await octokit.pulls.update({
-    owner,
-    repo,
-    pull_number: pullNumber,
-    draft: true,
-  });
+  try {
+    await octokit.graphql(
+      `
+      mutation ConvertPullRequestToDraft($pullRequestId: ID!) {
+        convertPullRequestToDraft(input: { pullRequestId: $pullRequestId }) {
+          pullRequest {
+            number
+            isDraft
+          }
+        }
+      }
+    `,
+      { pullRequestId: pull.node_id },
+    );
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    if (message.includes("unauthorized") || message.includes("403")) {
+      return "I don't have permission to convert this pull request to draft.";
+    }
+    return `Could not mark as draft: ${message}`;
+  }
 
   return `PR #${pullNumber} is now a **draft**.`;
 }
