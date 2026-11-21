@@ -11,6 +11,7 @@ import { rerunPullRequestWorkflows } from "./handlers/rerun.js";
 import { markPullRequestDraft } from "./handlers/draft.js";
 import { markPullRequestReady } from "./handlers/ready.js";
 import { pullRequestStatus } from "./handlers/status.js";
+import { pullRequestDiff } from "./handlers/diff.js";
 import { setPullRequestLocked } from "./handlers/lock.js";
 import { updatePullRequest } from "./handlers/update.js";
 
@@ -126,6 +127,8 @@ export async function handleIssueComment(
     case "status":
       reply = await pullRequestStatus(octokit, owner, repo, issueNumber);
       break;
+    case "diff":
+      reply = await pullRequestDiff(octokit, owner, repo, issueNumber);
     case "lock":
       reply = await setPullRequestLocked(
         octokit,
