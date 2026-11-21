@@ -34,7 +34,9 @@ function mergeAction(snapshot: StatusSnapshot): string {
   }
   const state = snapshot.mergeState?.toLowerCase();
   if (snapshot.draft) return "Use `@prbot ready` when you want review.";
-  if (state === "dirty") return "Resolve merge conflicts with the base branch.";
+  if (state === "dirty") {
+    return "Use `@prbot resolve` (or `resolve ours` / `resolve theirs`) to update and merge the base.";
+  }
   if (state === "blocked" || state === "unstable") {
     return "Address failing checks, reviews, or branch protection below.";
   }

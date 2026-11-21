@@ -11,6 +11,21 @@ describe("parseCommand", () => {
     expect(parseCommand("@PRBot  rebase please")).toEqual({ kind: "rebase" });
   });
 
+  it("parses resolve variants", () => {
+    expect(parseCommand("@prbot resolve")).toEqual({
+      kind: "resolve",
+      strategy: "merge",
+    });
+    expect(parseCommand("@prbot resolve ours")).toEqual({
+      kind: "resolve",
+      strategy: "ours",
+    });
+    expect(parseCommand("@prbot resolve theirs please")).toEqual({
+      kind: "resolve",
+      strategy: "theirs",
+    });
+  });
+
   it("parses rerun variants", () => {
     expect(parseCommand("@prbot rerun")).toEqual({
       kind: "rerun",
@@ -44,6 +59,19 @@ describe("parseCommand", () => {
 
   it("parses changelog", () => {
     expect(parseCommand("@prbot changelog")).toEqual({ kind: "changelog" });
+  });
+
+  it("parses diff", () => {
+    expect(parseCommand("@prbot diff")).toEqual({ kind: "diff" });
+  });
+
+  it("parses lock and unlock", () => {
+    expect(parseCommand("@prbot lock")).toEqual({ kind: "lock", locked: true });
+    expect(parseCommand("@prbot unlock")).toEqual({ kind: "lock", locked: false });
+  });
+
+  it("parses update", () => {
+    expect(parseCommand("@prbot update")).toEqual({ kind: "update" });
   });
 
   it("parses help", () => {
