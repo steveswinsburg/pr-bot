@@ -102,7 +102,7 @@ describe("parseCommand", () => {
     expect(parseCommand("@prbot force-merge")).toEqual({
       kind: "merge",
       bypass: true,
-      mergeMethod: undefined,
+      mergeMethod: "squash",
     });
     expect(parseCommand("@prbot force-merge squash")).toEqual({
       kind: "merge",

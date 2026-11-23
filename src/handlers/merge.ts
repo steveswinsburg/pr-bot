@@ -6,12 +6,41 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function squashOnlyMergePolicyHint(bypass: boolean): string {
+  if (bypass) {
+    return (
+      "This repository does not allow merge commits. " +
+      "Use `@prbot force-merge squash`, or `@prbot force-merge` (squash is the default for force-merge)."
+    );
+  }
+  return (
+    "This repository does not allow merge commits. " +
+    "Try `@prbot merge squash`. " +
+    "To bypass other rules with squash, use `@prbot force-merge` (if this app is on the ruleset bypass list)."
+  );
+}
+
+function isSquashOnlyPolicyError(lower: string): boolean {
+  return (
+    lower.includes("merge commits are not allowed") ||
+    lower.includes("merge commit is not allowed") ||
+    lower.includes("do not allow merge commits") ||
+    (lower.includes("squash") &&
+      (lower.includes("only") ||
+        lower.includes("required") ||
+        lower.includes("must use")))
+  );
+}
+
 /** Map merge API failures to user-facing text. */
 export function mergeFailureMessage(
   apiMessage: string,
   bypass: boolean,
 ): string {
   const lower = apiMessage.toLowerCase();
+  if (isSquashOnlyPolicyError(lower)) {
+    return squashOnlyMergePolicyHint(bypass);
+  }
   if (
     lower.includes("pull request is not mergeable") ||
     lower.includes("not mergeable") ||
@@ -172,7 +201,9 @@ export async function mergePullRequest(
     triggeredBy?: string;
   },
 ): Promise<string> {
-  const { bypass, mergeMethod, triggeredBy } = options;
+  const { bypass, triggeredBy } = options;
+  const mergeMethod =
+    options.mergeMethod ?? (bypass ? ("squash" as const) : undefined);
 
   const { data: pull } = await octokit.pulls.get({
     owner,
