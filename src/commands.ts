@@ -46,6 +46,9 @@ function parseMergeOptions(
     const method = parseMergeMethod(raw.toLowerCase());
     if (method) mergeMethod = method;
   }
+  if (bypass && mergeMethod === undefined) {
+    mergeMethod = "squash";
+  }
   return { kind: "merge", bypass, mergeMethod };
 }
 
@@ -124,5 +127,5 @@ export const HELP_TEXT = `**PR Bot** commands (use \`@prbot <command>\` on this 
 - \`@prbot unlock\` - unlock the PR conversation
 - \`@prbot update\` - merge the latest base branch into this PR (when behind)
 - \`@prbot merge\` - merge this PR when repository rules are satisfied (optional: \`squash\`, \`rebase\`, or \`merge\`)
-- \`@prbot force-merge\` - merge while bypassing rules the **GitHub App** is allowed to bypass (add the app to the ruleset bypass list)
+- \`@prbot force-merge\` - merge while bypassing rules the **GitHub App** is allowed to bypass (defaults to **squash**; optional: \`merge\` or \`rebase\`)
 - \`@prbot help\` - show this message`;

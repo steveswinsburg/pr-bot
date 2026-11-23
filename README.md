@@ -36,7 +36,7 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot unlock` | Unlock the PR conversation |
 | `@prbot update` | Merge latest base into the PR branch when behind |
 | `@prbot merge` | Merge the PR when rules allow (optional `squash` / `rebase` / `merge`) |
-| `@prbot force-merge` | Merge with rules bypass allowed for **this GitHub App** (see below) |
+| `@prbot force-merge` | Merge with rules bypass allowed for **this GitHub App** (defaults to **squash**; optional `rebase` / `merge`) |
 
 ### Rules bypass for `@prbot force-merge`
 

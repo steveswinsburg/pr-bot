@@ -33,6 +33,23 @@ describe("mergeFailureMessage", () => {
     const msg = mergeFailureMessage("At least 1 approving review is required", false);
     expect(msg).toContain("@prbot force-merge");
   });
+
+  it("suggests squash merge when merge commits are disallowed", () => {
+    const msg = mergeFailureMessage(
+      "Merge commits are not allowed on this repository.",
+      false,
+    );
+    expect(msg).toContain("@prbot merge squash");
+    expect(msg).toContain("@prbot force-merge");
+  });
+
+  it("reminds that force-merge defaults to squash when bypass still hits policy", () => {
+    const msg = mergeFailureMessage(
+      "Merge commits are not allowed on this repository.",
+      true,
+    );
+    expect(msg).toContain("squash is the default");
+  });
 });
 
 describe("mergePullRequest", () => {
@@ -94,6 +111,34 @@ describe("mergePullRequest", () => {
       }),
     );
     expect(octokit.pulls.merge).not.toHaveBeenCalled();
+  });
+
+  it("defaults force-merge to squash when merge method omitted", async () => {
+    const octokit = mockOctokit({
+      state: "open",
+      draft: false,
+      mergeable: true,
+      mergeable_state: "blocked",
+      head: { sha: "aaaabbbb" },
+      base: { ref: "main" },
+    });
+    octokit.request.mockResolvedValue({
+      status: 200,
+      data: {
+        status: "merged",
+        details: { sha: "deadbeefcafebabe" },
+      },
+    });
+
+    await mergePullRequest(octokit as never, "o", "r", 9, {
+      bypass: true,
+      triggeredBy: "carol",
+    });
+
+    expect(octokit.request).toHaveBeenCalledWith(
+      "PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge-async",
+      expect.objectContaining({ merge_method: "squash" }),
+    );
   });
 
   it("rejects draft pull requests", async () => {
