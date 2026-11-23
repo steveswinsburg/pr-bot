@@ -9,7 +9,7 @@ A GitHub App named **PR Bot** that reacts to `@prbot <command>` in pull request 
 | In scope (v0.1) | Out of scope (later) |
 |---|---|
 | `issue_comment` on PRs | Slash commands, CLI, Slack |
-| `@prbot rebase` | Auto-merge, label bots |
+| `@prbot rebase` | Label bots, merge queues |
 | `@prbot rerun` (latest Actions run on PR HEAD) | Org-wide policy engine |
 | `@prbot help` | Review comment threads (inline) |
 | Webhook HMAC verification | Per-repo command ACLs |
@@ -36,8 +36,17 @@ Mentions are case-insensitive. Extra text on the line is allowed after the comma
 | `lock` | Lock the pull request conversation (`issues.lock`) |
 | `unlock` | Unlock the pull request conversation (`issues.unlock`) |
 | `update` | If the PR branch is behind its base, merge the base into the head via GraphQL `updatePullRequestBranch` (`updateMethod: MERGE`); if clean/up-to-date, say so; if dirty/conflicted, suggest resolving locally |
+| `merge` | Merge the open PR via REST `pulls.merge` when repository rules are satisfied; optional third token: `merge`, `squash`, or `rebase` (repo default if omitted) |
+| `merge now` | Same merge, but REST `pulls/merge-async` with `bypass_rules: true` and `merge_action: direct_merge` so the **GitHub App** may bypass rules it is allowed to bypass (not the comment author’s personal admin bypass) |
+| `force-merge` | Alias for `merge now` |
 
 Triggers only when the comment **action** is `created` and the sender is not this app’s bot user.
+
+### Merge and rules bypass
+
+Merges run with the installation token (the app identity). A maintainer checking **Merge without waiting for requirements to be met** on github.com uses their user account; `@prbot merge now` only works when this **GitHub App** is on the target branch ruleset bypass list (`Integration` actor, `bypass_mode: pull_request` recommended) or legacy branch protection bypass apps. OAuth on behalf of the commenter is out of scope for v0.1.
+
+Successful merges append a short note to the merge commit body: who triggered `@prbot` and whether bypass was requested. Bypass merges reply with a visible warning.
 
 ## GitHub App configuration
 

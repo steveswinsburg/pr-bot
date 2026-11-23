@@ -35,6 +35,20 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot lock` | Lock the PR conversation |
 | `@prbot unlock` | Unlock the PR conversation |
 | `@prbot update` | Merge latest base into the PR branch when behind |
+| `@prbot merge` | Merge the PR when rules allow (optional `squash` / `rebase` / `merge`) |
+| `@prbot merge now` / `force-merge` | Merge with rules bypass allowed for **this GitHub App** (see below) |
+
+### Rules bypass for `@prbot merge now`
+
+The bot merges as the **GitHub App**, not as you. Personal admin bypass on the GitHub website does not apply.
+
+To merge blocked PRs in one step from a comment, add this app to the ruleset on the base branch:
+
+1. Repo or org **Settings → Rules → Rulesets** (or legacy branch protection bypass apps).
+2. Edit the ruleset for the default branch.
+3. Under **Bypass list**, add this GitHub App as an **Integration** with bypass mode **pull request** (or equivalent).
+
+If **Do not allow bypassing the above settings** is enabled, the app must still be an explicit bypass actor. Anyone who can comment on the PR can request a merge; restrict who can comment if that is too broad.
 
 ## Create the GitHub App
 
