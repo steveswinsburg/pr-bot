@@ -29,9 +29,9 @@ describe("mergeFailureMessage", () => {
     expect(msg).toContain("bypass list");
   });
 
-  it("suggests merge now when normal merge is blocked", () => {
+  it("suggests force-merge when normal merge is blocked", () => {
     const msg = mergeFailureMessage("At least 1 approving review is required", false);
-    expect(msg).toContain("@prbot merge now");
+    expect(msg).toContain("@prbot force-merge");
   });
 });
 
@@ -60,7 +60,7 @@ describe("mergePullRequest", () => {
     expect(octokit.request).not.toHaveBeenCalled();
   });
 
-  it("uses merge-async with bypass_rules when merge now", async () => {
+  it("uses merge-async with bypass_rules for force-merge", async () => {
     const octokit = mockOctokit({
       state: "open",
       draft: false,

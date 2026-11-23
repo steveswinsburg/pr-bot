@@ -36,9 +36,9 @@ See [SPEC.md](./SPEC.md) for behavior and permissions.
 | `@prbot unlock` | Unlock the PR conversation |
 | `@prbot update` | Merge latest base into the PR branch when behind |
 | `@prbot merge` | Merge the PR when rules allow (optional `squash` / `rebase` / `merge`) |
-| `@prbot merge now` / `force-merge` | Merge with rules bypass allowed for **this GitHub App** (see below) |
+| `@prbot force-merge` | Merge with rules bypass allowed for **this GitHub App** (see below) |
 
-### Rules bypass for `@prbot merge now`
+### Rules bypass for `@prbot force-merge`
 
 The bot merges as the **GitHub App**, not as you. Personal admin bypass on the GitHub website does not apply.
 

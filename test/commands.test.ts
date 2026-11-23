@@ -91,12 +91,12 @@ describe("parseCommand", () => {
     });
     expect(parseCommand("@prbot merge now")).toEqual({
       kind: "merge",
-      bypass: true,
+      bypass: false,
       mergeMethod: undefined,
     });
     expect(parseCommand("@prbot merge now rebase")).toEqual({
       kind: "merge",
-      bypass: true,
+      bypass: false,
       mergeMethod: "rebase",
     });
     expect(parseCommand("@prbot force-merge")).toEqual({
@@ -104,6 +104,12 @@ describe("parseCommand", () => {
       bypass: true,
       mergeMethod: undefined,
     });
+    expect(parseCommand("@prbot force-merge squash")).toEqual({
+      kind: "merge",
+      bypass: true,
+      mergeMethod: "squash",
+    });
+    expect(parseCommand("@prbot forcemerge")).toBeNull();
   });
 
   it("parses help", () => {

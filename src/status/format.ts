@@ -38,7 +38,7 @@ function mergeAction(snapshot: StatusSnapshot): string {
     return "Use `@prbot resolve` (or `resolve ours` / `resolve theirs`) to update and merge the base.";
   }
   if (state === "blocked" || state === "unstable") {
-    return "Address failing checks and reviews, or `@prbot merge now` if this app may bypass rules.";
+    return "Address failing checks and reviews, or `@prbot force-merge` if this app may bypass rules.";
   }
   if (state === "behind" || (snapshot.behindBy ?? 0) > 0) {
     return "Update the branch (e.g. `@prbot rebase`).";

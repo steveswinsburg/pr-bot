@@ -35,10 +35,10 @@ export function mergeFailureMessage(
       "Could not bypass repository rules to merge.\n\n" +
       "PR Bot merges as the **GitHub App**, not as the comment author. " +
       "Personal admin bypass on the website does not apply here.\n\n" +
-      "To allow `@prbot merge now`, add this app to the target branch ruleset **bypass list** " +
+      "To allow `@prbot force-merge`, add this app to the target branch ruleset **bypass list** " +
       "(actor type **Integration**, bypass mode **pull request**). " +
       "If **Do not allow bypassing** is enabled for administrators, the app must still be an explicit bypass actor.\n\n" +
-      "Otherwise merge from GitHub when checks and reviews pass, or use `@prbot merge` without `now`."
+      "Otherwise merge from GitHub when checks and reviews pass, or use `@prbot merge`."
     );
   }
   if (
@@ -51,7 +51,7 @@ export function mergeFailureMessage(
   ) {
     return (
       "Merge blocked by repository rules (reviews, checks, or other requirements).\n\n" +
-      "Fix blockers and try again, or if maintainers may bypass rules for this app, use `@prbot merge now` " +
+      "Fix blockers and try again, or if maintainers may bypass rules for this app, use `@prbot force-merge` " +
       "(requires the app on the ruleset bypass list)."
     );
   }
@@ -60,7 +60,7 @@ export function mergeFailureMessage(
 
 function auditCommitMessage(triggeredBy: string | undefined, bypass: boolean): string {
   const who = triggeredBy ? `@${triggeredBy}` : "a collaborator";
-  const via = bypass ? "@prbot merge now (rules bypass requested)" : "@prbot merge";
+  const via = bypass ? "@prbot force-merge (rules bypass requested)" : "@prbot merge";
   return `${via} by ${who}`;
 }
 

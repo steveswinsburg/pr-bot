@@ -39,17 +39,11 @@ function parseMergeMethod(
 
 function parseMergeOptions(
   rest: string[],
-  forceBypass: boolean,
+  bypass: boolean,
 ): { kind: "merge"; bypass: boolean; mergeMethod?: "merge" | "squash" | "rebase" } {
-  let bypass = forceBypass;
   let mergeMethod: "merge" | "squash" | "rebase" | undefined;
   for (const raw of rest) {
-    const token = raw.toLowerCase();
-    if (token === "now" || token === "force") {
-      bypass = true;
-      continue;
-    }
-    const method = parseMergeMethod(token);
+    const method = parseMergeMethod(raw.toLowerCase());
     if (method) mergeMethod = method;
   }
   return { kind: "merge", bypass, mergeMethod };
@@ -104,7 +98,6 @@ export function parseCommand(
     case "update":
       return { kind: "update" };
     case "force-merge":
-    case "forcemerge":
       return parseMergeOptions(tokens.slice(1), true);
     case "merge":
       return parseMergeOptions(tokens.slice(1), false);
@@ -131,5 +124,5 @@ export const HELP_TEXT = `**PR Bot** commands (use \`@prbot <command>\` on this 
 - \`@prbot unlock\` - unlock the PR conversation
 - \`@prbot update\` - merge the latest base branch into this PR (when behind)
 - \`@prbot merge\` - merge this PR when repository rules are satisfied (optional: \`squash\`, \`rebase\`, or \`merge\`)
-- \`@prbot merge now\` / \`@prbot force-merge\` - merge while bypassing rules the **GitHub App** is allowed to bypass (add the app to the ruleset bypass list)
+- \`@prbot force-merge\` - merge while bypassing rules the **GitHub App** is allowed to bypass (add the app to the ruleset bypass list)
 - \`@prbot help\` - show this message`;
