@@ -16,6 +16,7 @@ import { pullRequestChangelog } from "./handlers/changelog.js";
 import { pullRequestDiff } from "./handlers/diff.js";
 import { setPullRequestLocked } from "./handlers/lock.js";
 import { updatePullRequest } from "./handlers/update.js";
+import { mergePullRequest } from "./handlers/merge.js";
 
 export interface IssueCommentPayload {
   action: string;
@@ -149,6 +150,13 @@ export async function handleIssueComment(
       break;
     case "update":
       reply = await updatePullRequest(octokit, owner, repo, issueNumber);
+      break;
+    case "merge":
+      reply = await mergePullRequest(octokit, owner, repo, issueNumber, {
+        bypass: command.bypass,
+        mergeMethod: command.mergeMethod,
+        triggeredBy: payload.comment.user?.login,
+      });
       break;
   }
 

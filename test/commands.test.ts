@@ -78,6 +78,40 @@ describe("parseCommand", () => {
     expect(parseCommand("@prbot update")).toEqual({ kind: "update" });
   });
 
+  it("parses merge variants", () => {
+    expect(parseCommand("@prbot merge")).toEqual({
+      kind: "merge",
+      bypass: false,
+      mergeMethod: undefined,
+    });
+    expect(parseCommand("@prbot merge squash")).toEqual({
+      kind: "merge",
+      bypass: false,
+      mergeMethod: "squash",
+    });
+    expect(parseCommand("@prbot merge now")).toEqual({
+      kind: "merge",
+      bypass: false,
+      mergeMethod: undefined,
+    });
+    expect(parseCommand("@prbot merge now rebase")).toEqual({
+      kind: "merge",
+      bypass: false,
+      mergeMethod: "rebase",
+    });
+    expect(parseCommand("@prbot force-merge")).toEqual({
+      kind: "merge",
+      bypass: true,
+      mergeMethod: undefined,
+    });
+    expect(parseCommand("@prbot force-merge squash")).toEqual({
+      kind: "merge",
+      bypass: true,
+      mergeMethod: "squash",
+    });
+    expect(parseCommand("@prbot forcemerge")).toBeNull();
+  });
+
   it("parses help", () => {
     expect(parseCommand("@prbot help")).toEqual({ kind: "help" });
     expect(parseCommand("@prbot /help")).toEqual({ kind: "help" });

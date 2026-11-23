@@ -10,7 +10,8 @@ export type BotCommand =
   | { kind: "changelog" }
   | { kind: "diff" }
   | { kind: "lock"; locked: boolean }
-  | { kind: "update" };
+  | { kind: "update" }
+  | { kind: "merge"; bypass: boolean; mergeMethod?: "merge" | "squash" | "rebase" };
 
 function escapeRegexLiteral(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -25,6 +26,27 @@ export function commandMentionPattern(appSlug?: string): RegExp {
   }
   const alternation = names.map(escapeRegexLiteral).join("|");
   return new RegExp(`^@(?:${alternation})(?:\\[bot\\])?(?=\\s|$)`, "i");
+}
+
+function parseMergeMethod(
+  token: string | undefined,
+): "merge" | "squash" | "rebase" | undefined {
+  if (token === "merge" || token === "squash" || token === "rebase") {
+    return token;
+  }
+  return undefined;
+}
+
+function parseMergeOptions(
+  rest: string[],
+  bypass: boolean,
+): { kind: "merge"; bypass: boolean; mergeMethod?: "merge" | "squash" | "rebase" } {
+  let mergeMethod: "merge" | "squash" | "rebase" | undefined;
+  for (const raw of rest) {
+    const method = parseMergeMethod(raw.toLowerCase());
+    if (method) mergeMethod = method;
+  }
+  return { kind: "merge", bypass, mergeMethod };
 }
 
 export function parseCommand(
@@ -75,6 +97,10 @@ export function parseCommand(
       return { kind: "lock", locked: false };
     case "update":
       return { kind: "update" };
+    case "force-merge":
+      return parseMergeOptions(tokens.slice(1), true);
+    case "merge":
+      return parseMergeOptions(tokens.slice(1), false);
     default:
       return null;
   }
@@ -97,4 +123,6 @@ export const HELP_TEXT = `**PR Bot** commands (use \`@prbot <command>\` on this 
 - \`@prbot lock\` - lock the PR conversation
 - \`@prbot unlock\` - unlock the PR conversation
 - \`@prbot update\` - merge the latest base branch into this PR (when behind)
+- \`@prbot merge\` - merge this PR when repository rules are satisfied (optional: \`squash\`, \`rebase\`, or \`merge\`)
+- \`@prbot force-merge\` - merge while bypassing rules the **GitHub App** is allowed to bypass (add the app to the ruleset bypass list)
 - \`@prbot help\` - show this message`;
